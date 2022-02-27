@@ -6,17 +6,37 @@ from matplotlib.colors import ListedColormap
 import  os 
 
 def prepare_data(df):
-    X = df.drop("y", axis =1)
-    y = df['y']
-    return X ,y 
+  """It is used to seperate dependent(X) and independent(y) variables
+
+  Args:
+      df (pd.DataFrame): It's the pandas data frame
+
+  Returns:
+      tuple : It returns the tuples of dependent(X) and independent(y)
+  """
+  X = df.drop("y", axis =1)
+  y = df['y']
+  return X ,y 
 
 def save_model(model, filename):
-    model_dir = "models"
-    os.makedirs(model_dir, exist_ok = True) #Only create if model_dir doesn't exist
-    file_path = os.path.join(model_dir, filename)
-    joblib.dump(model, file_path)
+  """This method is to save the trained model with a given filename
+
+  Args:
+      model (python object): trained machine learning model
+      filename (str): path to save the trained model
+  """
+  os.makedirs("models", exist_ok = True) #Only create if model_dir doesn't exist
+  file_path = os.path.join("models", filename)
+  joblib.dump(model, file_path)
 
 def save_plot(df, file_name, model):
+  """This method is used to generate and save the plot of input dataset with their seperation body generated with the model
+
+  Args:
+      df (pd.DataFrame): Pandas Dataframe having the data points to plot
+      file_name (str): Name of the plot to save the file with
+      model (python object): Trained model to make the decision
+  """
   def _create_base_plot(df):
     df.plot(kind="scatter", x="x1", y="x2", c="y", s=100, cmap="winter")
     plt.axhline(y=0, color="black", linestyle="--", linewidth=1)
