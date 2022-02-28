@@ -1,9 +1,16 @@
+"""
+Author = Hasnain
+Contact = hasnainmehmood3435@gmail.com
+
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import joblib 
 from matplotlib.colors import ListedColormap
 import  os 
+import logging
 
 def prepare_data(df):
   """It is used to seperate dependent(X) and independent(y) variables
@@ -14,6 +21,7 @@ def prepare_data(df):
   Returns:
       tuple : It returns the tuples of dependent(X) and independent(y)
   """
+  logging.info("Preparing data by dividing it into dependent(X) and independent(y)")
   X = df.drop("y", axis =1)
   y = df['y']
   return X ,y 
@@ -25,9 +33,11 @@ def save_model(model, filename):
       model (python object): trained machine learning model
       filename (str): path to save the trained model
   """
+  logging.info("Saving the trained model")
   os.makedirs("models", exist_ok = True) #Only create if model_dir doesn't exist
   file_path = os.path.join("models", filename)
   joblib.dump(model, file_path)
+  logging.info(f"Saved the trained model at {file_path}")
 
 def save_plot(df, file_name, model):
   """This method is used to generate and save the plot of input dataset with their seperation body generated with the model
@@ -38,6 +48,7 @@ def save_plot(df, file_name, model):
       model (python object): Trained model to make the decision
   """
   def _create_base_plot(df):
+    logging.info("Creating the base plot")
     df.plot(kind="scatter", x="x1", y="x2", c="y", s=100, cmap="winter")
     plt.axhline(y=0, color="black", linestyle="--", linewidth=1)
     plt.axvline(x=0, color="black", linestyle="--", linewidth=1)
@@ -45,6 +56,7 @@ def save_plot(df, file_name, model):
     figure.set_size_inches(10, 8)
 
   def _plot_decision_regions(X, y, classfier, resolution=0.02):
+    logging.info("Plotting decision regions")
     colors = ("red", "blue", "lightgreen", "gray", "cyan")
     cmap = ListedColormap(colors[: len(np.unique(y))])
 
@@ -75,3 +87,4 @@ def save_plot(df, file_name, model):
   os.makedirs(plot_dir, exist_ok=True) # ONLY CREATE IF MODEL_DIR DOESN"T EXISTS
   plotPath = os.path.join(plot_dir, file_name) # model/filename
   plt.savefig(plotPath)
+  logging.info(f"Saved the plot at {plotPath}")
